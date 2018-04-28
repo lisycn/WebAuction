@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.example.entity.Goods" table="goods" schema="auction">
+        <id name="id" type="java.lang.Integer">
+            <column name="id" sql-type="int(4)"/>
+            <generator class="native"/>
+        </id>
+        <property name="goodsName" type="java.lang.String">
+            <column name="goods_name" sql-type="varchar(50)" length="50"/>
+        </property>
+        <property name="goodsPrice" type="java.lang.Float">
+            <column name="goods_price" sql-type="float" precision="12" scale="0" not-null="true"/>
+        </property>
+        <property name="goodsPic" type="java.lang.String">
+            <column name="goods_pic" sql-type="varchar(200)" length="200" not-null="true"/>
+        </property>
+        <property name="goodsDesc" type="java.lang.String">
+            <column name="goods_desc" sql-type="mediumtext" not-null="true"/>
+        </property>
+        <many-to-one name="seller" class="com.example.entity.Users" fetch="select" lazy="false">
+            <column name="seller_id" sql-type="int(4)"/>
+        </many-to-one>
+        <many-to-one name="buyer" class="com.example.entity.Users" fetch="select" lazy="false">
+            <column name="buyer_id" sql-type="int(4)"/>
+        </many-to-one>
+        <property name="goodsStatus" type="java.lang.Integer">
+            <column name="goods_status" sql-type="int(4)"/>
+        </property>
+        <set name="bidSet" inverse="true" lazy="false" order-by="bid_price desc">
+            <key>
+                <column name="goods_id" not-null="true"/>
+            </key>
+            <one-to-many class="com.example.entity.Bid"/>
+        </set>
+    </class>
+</hibernate-mapping>
