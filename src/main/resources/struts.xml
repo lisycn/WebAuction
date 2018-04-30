@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+        "http://struts.apache.org/dtds/struts-2.5.dtd">
+
+<struts>
+    <constant name="struts.url.http.port" value="9090"/>
+    <!-- 设置浏览器是否缓存静态内容,默认值为true(生产环境下使用),开发阶段最好关闭 -->
+    <constant name="struts.serve.static.browserCache"
+              value="false"/>
+    <!-- 当struts的配置文件修改后,系统是否自动重新加载该文件,默认值为false(生产环境下使用),开发阶段最好打开 -->
+    <constant name="struts.configuration.xml.reload" value="true"/>
+    <!-- 开发模式下使用,这样可以打印出更详细的错误信息 -->
+    <constant name="struts.devMode" value="false"/>
+
+    <constant name="struts.action.extension" value="do,action"/>
+    <constant name="struts.i18n.encoding" value="UTF-8"/>
+    <constant name="struts.multipart.maxSize" value="4194304"/><!--
+		4M -->
+
+    <package name="myDefault" extends="struts-default">
+        <interceptors>
+            <!-- 声明拦截器 -->
+<!--
+            <interceptor name="loginInterceptor"
+                         class="com.example.interceptor.LoginInterceptor"/>
+-->
+            <interceptor name="errorInterceptor"
+                         class="com.example.interceptor.ErrorInterceptor"/>
+            <!-- 配置拦截器栈 -->
+            <interceptor-stack name="myInterceptor">
+                <interceptor-ref name="defaultStack"/>
+                <interceptor-ref name="errorInterceptor"/>
+            </interceptor-stack>
+        </interceptors>
+        <!-- 覆盖底层的拦截器栈 对包中的所有action都有效 -->
+        <default-interceptor-ref
+                name="myInterceptor"/>
+        <global-results>
+            <result name="errorMsg">/error.jsp</result>
+        </global-results>
+        <global-exception-mappings>
+            <exception-mapping result="errorMsg" exception="java.lang.Exception"/>
+        </global-exception-mappings>
+    </package>
+
+    <package name="user" namespace="/users" extends="myDefault">
+        <interceptors>
+            <!-- 声明拦截器 -->
+            <interceptor name="loginInterceptor"
+                         class="com.example.interceptor.LoginInterceptor"/>
+        </interceptors>
+        <action name="addUser" class="usersAction" method="addUser">
+            <result type="redirect">/index.jsp</result>
+            <result name="input">/jsp/register.jsp</result>
+        </action>
+        <action name="login" class="usersAction" method="login">
+            <result name="index" type="redirect">/index.jsp</result>
+        </action>
+
+        <action name="logout" class="usersAction" method="logout">
+            <result type="redirect">/index.jsp</result>
+            <result name="login" type="redirect">/index.jsp</result>
+            <interceptor-ref name="defaultStack"/>
+            <interceptor-ref name="loginInterceptor"/>
+        </action>
+
+        <action name="changePassword" class="usersAction" method="changePassword">
+            <result type="redirect">/index.jsp</result>
+            <result name="login" type="redirect">/index.jsp</result>
+            <interceptor-ref name="defaultStack"/>
+            <interceptor-ref name="loginInterceptor"/>
+        </action>
+    </package>
+
+    <package name="goods" namespace="/goods"
+             extends="struts-default">
+        <interceptors>
+            <!-- 声明拦截器 -->
+            <interceptor name="loginInterceptor"
+                         class="com.example.interceptor.LoginInterceptor"/>
+        </interceptors>
+
+        <action name="showOnSellGoods" class="goodsAction"
+                method="showOnSellGoods">
+            <result name="goodsList">/jsp/goods_list.jsp</result>
+        </action>
+
+        <action name="showMyGoods" class="goodsAction" method="showMyGoods">
+            <result name="myGoodsList">/jsp/my_goods.jsp</result>
+            <result name="login" type="redirect">/index.jsp</result>
+            <interceptor-ref name="defaultStack"/>
+            <interceptor-ref name="loginInterceptor" />
+        </action>
+
+        <action name="toAddGoods" class="goodsAction" method="addGoods">
+            <result name="input">/jsp/add_goods.jsp</result>
+            <result name="index" type="redirect">/index.jsp</result>
+            <result name="login" type="redirect">/index.jsp</result>
+
+            <interceptor-ref name="fileUpload">
+                <!-- 文件过滤 -->
+                <param name="allowedTypes">image/bmp,image/png,image/gif,image/jpeg</param>
+                <!-- 文件大小, 以字节为单位 -->
+                <param name="maximumSize">4194304</param>
+            </interceptor-ref>
+            <interceptor-ref name="defaultStack"/>
+            <interceptor-ref name="loginInterceptor" />
+
+        </action>
+
+        <action name="doBid" class="goodsAction" method="doBid">
+            <result name="goodsBid">/jsp/goods_bid.jsp</result>
+            <result name="login" type="redirect">/index.jsp</result>
+            <interceptor-ref name="defaultStack"/>
+            <interceptor-ref name="loginInterceptor" />
+        </action>
+    </package>
+
+    <package name="bid" namespace="/bid" extends="myDefault">
+        <interceptors>
+            <!-- 声明拦截器 -->
+            <interceptor name="loginInterceptor"
+                         class="com.example.interceptor.LoginInterceptor"/>
+        </interceptors>
+
+        <action name="doBid" class="bidAction" method="doBid">
+            <result name="index" type="redirect">/index.jsp</result>
+            <result name="login" type="redirect">/index.jsp</result>
+            <interceptor-ref name="defaultStack"/>
+            <interceptor-ref name="loginInterceptor" />
+        </action>
+
+        <action name="doDeal" class="bidAction" method="doDeal">
+            <result name="index" type="redirect">/index.jsp</result>
+            <result name="login" type="redirect">/index.jsp</result>
+            <interceptor-ref name="defaultStack"/>
+            <interceptor-ref name="loginInterceptor" />
+        </action>
+
+    </package>
+
+</struts>
