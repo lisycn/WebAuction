@@ -13,28 +13,63 @@
     <!-- 加载配置文件 -->
     <context:property-placeholder location="classpath:*.properties" ignore-unresolvable="true"/>
     <!-- 数据库连接池 -->
-    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+<!--    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
           destroy-method="close">
         <property name="jdbcUrl" value="${jdbc.url}"/>
         <property name="user" value="${jdbc.username}"/>
         <property name="password" value="${jdbc.password}"/>
         <property name="driverClass" value="${jdbc.driver}"/>
-        <!--连接池中保留的最大连接数。默认值: 15 -->
+        &lt;!&ndash;连接池中保留的最大连接数。默认值: 15 &ndash;&gt;
         <property name="maxPoolSize" value="20"/>
-        <!-- 连接池中保留的最小连接数，默认为：3-->
+        &lt;!&ndash; 连接池中保留的最小连接数，默认为：3&ndash;&gt;
         <property name="minPoolSize" value="2"/>
-        <!-- 初始化连接池中的连接数，取值应在minPoolSize与maxPoolSize之间，默认为3-->
+        &lt;!&ndash; 初始化连接池中的连接数，取值应在minPoolSize与maxPoolSize之间，默认为3&ndash;&gt;
         <property name="initialPoolSize" value="2"/>
-        <!--最大空闲时间，60秒内未使用则连接被丢弃。若为0则永不丢弃。默认值: 0 -->
+        &lt;!&ndash;最大空闲时间，60秒内未使用则连接被丢弃。若为0则永不丢弃。默认值: 0 &ndash;&gt;
         <property name="maxIdleTime" value="60"/>
-        <!--当连接池中的连接耗尽的时候c3p0一次同时获取的连接数。默认值: 3 -->
+        &lt;!&ndash;当连接池中的连接耗尽的时候c3p0一次同时获取的连接数。默认值: 3 &ndash;&gt;
         <property name="acquireIncrement" value="2"/>
-        <!--定义在从数据库获取新连接失败后重复尝试的次数。默认值: 30 ；小于等于0表示无限次-->
+        &lt;!&ndash;定义在从数据库获取新连接失败后重复尝试的次数。默认值: 30 ；小于等于0表示无限次&ndash;&gt;
         <property name="acquireRetryAttempts" value="0"/>
-        <!--重新尝试的时间间隔，默认为：1000毫秒-->
+        &lt;!&ndash;重新尝试的时间间隔，默认为：1000毫秒&ndash;&gt;
         <property name="acquireRetryDelay" value="1000"/>
-        <!--如果为false，则获取连接失败将会引起所有等待连接池来获取连接的线程抛出异常，但是数据源仍有效保留，并在下次调用getConnection()的时候继续尝试获取连接。如果设为true，那么在尝试获取连接失败后该数据源将申明已断开并永久关闭。默认: false-->
+        &lt;!&ndash;如果为false，则获取连接失败将会引起所有等待连接池来获取连接的线程抛出异常，但是数据源仍有效保留，并在下次调用getConnection()的时候继续尝试获取连接。如果设为true，那么在尝试获取连接失败后该数据源将申明已断开并永久关闭。默认: false&ndash;&gt;
         <property name="breakAfterAcquireFailure" value="false"/>
+    </bean>-->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <!-- 数据源驱动类可不写，Druid默认会自动根据URL识别DriverClass -->
+        <property name="driverClassName" value="${jdbc.driver}" />
+
+        <!-- 基本属性 url、user、password -->
+        <property name="url" value="${jdbc.url}" />
+        <property name="username" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
+
+        <!-- 配置初始化大小、最小、最大 -->
+        <property name="initialSize" value="3" />
+        <property name="minIdle" value="3" />
+        <property name="maxActive" value="20" />
+
+        <!-- 配置获取连接等待超时的时间 -->
+        <property name="maxWait" value="60000" />
+
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="60000" />
+
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="300000" />
+
+        <property name="validationQuery" value="SELECT 'x'" />
+        <property name="testWhileIdle" value="true" />
+        <property name="testOnBorrow" value="false" />
+        <property name="testOnReturn" value="false" />
+
+        <!-- 打开PSCache，并且指定每个连接上PSCache的大小（Oracle使用）
+        <property name="poolPreparedStatements" value="true" />
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="20" /> -->
+
+        <!-- 配置监控统计拦截的filters -->
+        <property name="filters" value="stat" />
     </bean>
     <bean id="sessionFactory"
           class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">

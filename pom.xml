@@ -153,16 +153,16 @@
         </dependency>
 
         <!-- 添加连接池druid支持 -->
-<!--        <dependency>
+        <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
             <version>${druid.version}</version>
-        </dependency>-->
-        <dependency>
+        </dependency>
+        <!--<dependency>
             <groupId>com.mchange</groupId>
             <artifactId>c3p0</artifactId>
             <version>${c3p0.version}</version>
-        </dependency>
+        </dependency>-->
 
         <!-- 添加shiro支持 -->
         <dependency>
