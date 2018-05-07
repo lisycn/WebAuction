@@ -11,7 +11,11 @@ import org.springframework.dao.DataAccessException;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.Interceptor;
 import org.springframework.stereotype.Component;
-
+/**
+ * @description: 封装错误信息拦截器
+ * @author: Mr.Eight
+ * @date: 5.7
+ **/
 public class ErrorInterceptor implements Interceptor {
     public String intercept(ActionInvocation arg0) throws Exception {
         try {

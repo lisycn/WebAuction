@@ -18,15 +18,20 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * @description: GoodsAction 卖品Action类
+ * @author: Mr.Eight
+ * @date: 5.7
+ **/
 @Controller
 @Scope("prototype")
 public class GoodsAction extends ActionSupport {
     @Resource
     private GoodsService goodsService;
 
-    private Goods goods;
-    private File goodsImage;
-    private String fileName;
+    private Goods goods; // 接收goods对象
+    private File goodsImage; // 接收图片
+    private String fileName; // 图片文件名
 
     /**
      * show all goods on sell

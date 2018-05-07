@@ -13,6 +13,11 @@ import org.springframework.stereotype.Controller;
 import javax.annotation.Resource;
 import java.util.Date;
 
+/**
+ * @description: BidAction 出价Action类
+ * @author: Mr.Eight
+ * @date: 5.7
+ **/
 @Controller
 @Scope("prototype")
 public class BidAction extends ActionSupport {
@@ -21,10 +26,14 @@ public class BidAction extends ActionSupport {
     @Resource
     private GoodsService goodsService;
 
-    private Integer bidId;
-    private float bidPrice;
-    private Goods goods;
+    private Integer bidId; // 出价商品id
+    private float bidPrice; // 价格
+    private Goods goods; // goods对象
 
+    /**
+     * 用户出价
+     * @return index
+     */
     public String doBid() {
         Goods good = goodsService.getGoodsById(goods.getId());
         Users buyer = (Users) ActionContext.getContext().getSession().get("users");
@@ -38,6 +47,10 @@ public class BidAction extends ActionSupport {
         return "index";
     }
 
+    /**
+     * 卖家选择成交
+     * @return index
+     */
     public String doDeal() {
         Bid bid = bidService.getBid(bidId);
         Goods good = bid.getGoods();

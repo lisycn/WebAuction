@@ -10,20 +10,33 @@ import org.springframework.stereotype.Controller;
 import javax.annotation.Resource;
 import java.util.Map;
 
+/**
+ * @description: 用户Action类
+ * @author: Mr.Eight
+ * @date: 5.7
+ **/
 @Controller
 @Scope("prototype")
 public class UsersAction extends ActionSupport {
     @Resource
     private UsersService usersService;
 
-    private Users users;
+    private Users users; // 接收users对象
 
+    /**
+     * 用户注册
+     * @return success
+     */
     public String addUser(){
         usersService.addUsers(users);
         return "success";
     }
 
 
+    /**
+     * 用户登录
+     * @return 重定向到主页
+     */
     public String login(){
         Users u = usersService.getUsers(users);
         if(u != null){
@@ -32,6 +45,10 @@ public class UsersAction extends ActionSupport {
         return "index";
     }
 
+    /**
+     * 注销登录
+     * @return success
+     */
     public String logout(){
         Map<String, Object> session = ActionContext.getContext().getSession();
         if(session.get("users") != null){
@@ -40,6 +57,10 @@ public class UsersAction extends ActionSupport {
         return "success";
     }
 
+    /**
+     * 修改资料
+     * @return success
+     */
     public String changePassword(){
         Map<String, Object> session = ActionContext.getContext().getSession();
         Users u = (Users) session.get("users");
